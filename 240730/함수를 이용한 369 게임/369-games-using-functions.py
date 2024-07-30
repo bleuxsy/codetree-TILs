@@ -1,15 +1,15 @@
-def threesixnin(n):
-    n = str(n)
-    for i in range(len(n)):
-        if int(n[i]) % 3 ==0:
+def contains_369(n):
+    while n > 0:
+        if n%10 ==3 or n%10 == 6 or n%10 == 9:
             return True
-def threemul(n):
-    return n%3==0
-
+        n//=10
+    return False
+def is_369_number(n):
+    return contains_369(n) or n%3 == 0
 
 a,b = map(int,input().split())
 cnt = 0
 for num in range(a,b+1):
-    if threesixnin(num) or threemul(num):
+    if is_369_number(num):
         cnt+=1
 print(cnt)
