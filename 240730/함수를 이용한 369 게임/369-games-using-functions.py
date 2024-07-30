@@ -1,7 +1,8 @@
 def threesixnin(n):
-    x = n//10
-    y = n %10
-    return x%3==0 or y%3==0
+    n = str(n)
+    for i in range(len(n)):
+        if int(n[i]) % 3 ==0:
+            return True
 def threemul(n):
     return n%3==0
 
