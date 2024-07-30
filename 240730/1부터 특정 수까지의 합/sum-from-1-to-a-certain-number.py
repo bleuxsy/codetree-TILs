@@ -5,4 +5,4 @@ def solution(n):
         
     return (sum // 10)
 N = int(input())
-solution(N)
+print(solution(N))
