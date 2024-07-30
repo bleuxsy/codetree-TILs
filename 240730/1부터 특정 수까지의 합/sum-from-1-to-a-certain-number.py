@@ -4,4 +4,5 @@ def solution(n):
         sum+= i 
         
     return (sum // 10)
-print(solution(100))
+N = int(input())
+solution(N)
