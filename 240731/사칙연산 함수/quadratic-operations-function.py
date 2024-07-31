@@ -22,4 +22,4 @@ elif o =="/":
     result = remind(int(a),int(c))
     print(a,o,c,"=",result,end=" ")
 else:
-    print("false")
+    print("False")
