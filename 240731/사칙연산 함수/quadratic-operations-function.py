@@ -5,7 +5,7 @@ def minus(x,y):
 def mul(x,y):
     return(x*y)
 def remind(x,y):
-    return(x/y)
+    return(x//y)
 
 result = 0
 a, o, c= input().split()
