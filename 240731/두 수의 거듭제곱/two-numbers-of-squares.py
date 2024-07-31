@@ -1,4 +1,6 @@
 a, b =map(int, input().split())
-for i in range(1,b+1):
-    a *= a
-print(a)
+result = 1
+
+for i in range(0,b):
+    result = result * a
+print(result)
