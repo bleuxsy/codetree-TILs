@@ -11,7 +11,7 @@ def isMonth(y,m,d):
         if d <32:
             return True
         return False
-    if m in [2,4,6,9,11]:
+    if m in [4,6,9,11]:
         if d<31 : 
             return True
         return False
