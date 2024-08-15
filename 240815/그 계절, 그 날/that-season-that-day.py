@@ -18,10 +18,9 @@ def isMonth(y,m,d):
     if m == 2:
         if notyoon(y) and d < 29: 
             return True
-        if notyoon(y):
-            if d  > 29 : 
-                return False
-        return True
+        if notyoon(y)==False and d<30:
+            return True
+        return False
 
 Y, M, D = map(int, input().split())
 if isMonth(Y,M,D):
