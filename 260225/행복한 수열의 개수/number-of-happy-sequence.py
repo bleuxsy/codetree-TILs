@@ -1,30 +1,26 @@
 n, m = map(int, input().split())
 grid = [list(map(int, input().split())) for _ in range(n)]
-row = []
+
+def ok_line(lst, m):
+    run = 1
+    for i in range(1, len(lst)):
+        if lst[i] == lst[i-1]:
+            run += 1
+            if run >= m:
+                return 1
+        else:
+            run = 1
+    return 1 if m == 1 else 0
+
 res = 0
-for i in range(n):
-    flag = 1
-    for j in range(1, n):
-        if grid[i][j-1] == grid[i][j]:
-            flag += 1
-        else:
-            flag = 1
-    row.append(flag)
 
-for r in row:
-    if r >= m:
-        res += 1
-col = []
-for i in range( n):
-    for j in range(1,n):
-        if grid[j-1][i] == grid[j][i]:
-            flag += 1
-        else:
-            flag = 1
-    col.append(flag)
+# rows
+for r in grid:
+    res += ok_line(r, m)
 
-for c in col:
-    if c >= m:
-        res += 1
+# cols
+for c in range(n):
+    col = [grid[r][c] for r in range(n)]
+    res += ok_line(col, m)
+
 print(res)
-# Please write your code here.
