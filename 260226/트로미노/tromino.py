@@ -4,9 +4,9 @@ grid = [list(map(int, input().split())) for _ in range(n)]
 answer = 0
 def first(x, y, L, t):
     global answer
-    bigger = 0
-    mx = 0
-    my = 0
+    bigger = -1
+    mx = x
+    my = y
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0 ]
     if L == 2:
