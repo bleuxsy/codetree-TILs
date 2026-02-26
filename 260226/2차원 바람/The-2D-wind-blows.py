@@ -56,5 +56,5 @@ for q in range(Q):
             b[i][j] = check(i, j)
 
     a= b
-for r in b:
+for r in a:
     print(*r)
