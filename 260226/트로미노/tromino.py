@@ -11,6 +11,7 @@ def first(x, y, L, t):
     dy = [0, -1, 1, 0 ]
     if L == 2:
         answer = max(answer, t)
+        #print(f"t", t)
         return 
     for d in range(4):
         nx = dx[d] + x
@@ -21,28 +22,27 @@ def first(x, y, L, t):
                 bigger = grid[nx][ny]
                 mx = nx
                 my = ny
-                
+                #print(f"mx, my, bigger", mx, my, bigger)
                 visited[nx][ny] = 1
                 first(mx, my, L+1, t + bigger)
+                visited[nx][ny] = 0
     return 
     
 max_row = 0
 max_col = 0
 max_val = grid[0][0]
 
-
+max_val = max(max(row) for row in grid)
+xy = []
 # Please write your code here.
 for i in range(n):
     for j in range(m):
-        if grid[i][j] >= max_val:
-            max_val = grid[i][j]
-            max_row = i
-            max_col = j
-            
+        if grid[i][j] == max_val:
+            #print(f"max_row, max_col", i, j)
             visited = list([0] * m for _ in range(n))
-            visited[max_row][max_col] = 1
+            visited[i][j] = 1
             #answer = first(max_row, max_col, 0, max_val)
-            first(max_row, max_col, 0, max_val)
+            first(i, j, 0, max_val)
             
 print(answer)
         
