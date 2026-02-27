@@ -68,31 +68,33 @@ def up(lst):
     for r in newgrid:
         print(*r)
 def down(lst):
-    newgrid = list([0]*4 for _ in range(4))
+    newgrid = [[0]*4 for _ in range(4)]
+
     for j in range(4):
-        temp = deque()
-
-        
-        for i in range(4):
+        # 1) 아래 -> 위로 0 아닌 값만 모으기 (bottom-first)
+        vals = []
+        for i in range(3, -1, -1):
             if lst[i][j] != 0:
-                temp.append(lst[i][j])
+                vals.append(lst[i][j])
 
-        
-        merged = deque()
-        while temp:
-            if len(temp) >= 2 and temp[0] == temp[1]:
-                merged.append(temp.popleft() * 2)
-                temp.popleft()
+        # 2) 아래쪽부터 합치기 (bottom-first merge)
+        temp = deque()
+        k = 0
+        while k < len(vals):
+            if k + 1 < len(vals) and vals[k] == vals[k + 1]:
+                temp.append(vals[k] * 2)
+                k += 2
             else:
-                merged.append(temp.popleft())
+                temp.append(vals[k])
+                k += 1
 
-        
-        while len(merged) < 4:
-            merged.appendleft(0)
+        # 3) 아래로 밀기: 부족한 건 위쪽이 0이 되도록 뒤에 0 추가 (temp는 bottom->top)
+        while len(temp) < 4:
+            temp.append(0)
 
-        # 열에 채우기
-        for i in range(4):
-            newgrid[i][j] = merged[i]
+        # 4) newgrid에 아래부터 채우기
+        for i in range(3, -1, -1):
+            newgrid[i][j] = temp[3 - i]   # i=3(bottom) <- temp[0]
 
     for r in newgrid:
         print(*r)
