@@ -20,7 +20,9 @@ visited = list([0]*(N+1) for _ in range(N+1))
 visited[x][y] = 1
 while stack:
     sx , sy , sd = stack.popleft()
-    
+    if 1<= sx+dx[sd-1] <= N and 1<= sy+dy[sd-1] <= N:
+        if grid[sx+dx[sd-1]][sy+dy[sd-1]] == ".":
+            sd = sd-1
     #진행 방향의 다음 칸
     nx = sx + dx[sd]
     ny = sy + dy[sd]
@@ -30,19 +32,13 @@ while stack:
             if grid[nx][ny] == ".":
                 #오른쪽에 벽이 없을 때,
                 nd = sd - 1
-                if grid[nx+dx[nd]][ny+dy[nd]] == ".":
-                    visited[nx][ny] = 1
-                    visited[nx+dx[nd]][ny+dy[nd]] = 1
-                    stack.append((nx+dx[nd],ny+dy[nd], nd))
-                    time += 2
-                else:
-                    visited[nx][ny] = 1
-                    stack.append((nx, ny, sd))
-                    time += 1
-            #진행방향에 벽이 있을 때
+                stack.append((nx, ny, nd))
+                time += 1
             else:
                 nd = sd +1
-                stack.append((sx, sy, nd))
+                stack.append((nx, ny, nd))
+                time += 1
+                
         else:
             print(-1)
             break
