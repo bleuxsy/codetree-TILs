@@ -84,7 +84,7 @@ def down(lst):
                     temp.appendleft(2*lst[i][j])
                     i -= 2
             else:
-                    temp.append(lst[i][j])
+                    temp.appendleft(lst[i][j])
                     i -= 1
         while len(temp) < 4:
                 temp.appendleft(0)
