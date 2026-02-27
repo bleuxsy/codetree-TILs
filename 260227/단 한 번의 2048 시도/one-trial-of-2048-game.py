@@ -42,7 +42,7 @@ def right(lst):
         while len(temp) < 4:
             temp.appendleft(0)
         print(*temp)
-def down(lst):
+def up(lst):
     newgrid = list([0]*4 for _ in range(4))
     for j in range(4):
         i = 0
@@ -67,7 +67,7 @@ def down(lst):
             newgrid[i][j] = temp[i]
     for r in newgrid:
         print(*r)
-def up(lst):
+def down(lst):
     newgrid = list([0]*4 for _ in range(4))
     for j in range(4):
         i = 3
