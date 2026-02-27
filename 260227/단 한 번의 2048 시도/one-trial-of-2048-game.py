@@ -43,30 +43,34 @@ def right(lst):
             temp.appendleft(0)
         print(*temp)
 def down(lst):
+    newgrid = list([0]*4 for _ in range(4))
     for j in range(4):
-        for i in range(4):
-            temp = deque()
+        i = 0
+        temp = deque()
         
-            
-            while i < 3 :
-                if lst[i][j] == 0:
+        while i < 3 :
+            if lst[i][j] == 0:
                     i += 1
                     continue
-                if lst[i][j]== lst[i+1][j]:
+            if lst[i][j]== lst[i+1][j]:
                     temp.append(2*lst[i][j])
                     i += 2
-                else:
+            else:
                     temp.append(lst[i][j])
                     i += 1
-            while len(temp) < 4:
+        while len(temp) < 4:
                 temp.append(0)
-            for r in temp:
-                print(r)
+        for i in range(4):
+            new_grid[i][j] = temp[i]
+    for r in row:
+        print(*r)
+
+                
 if dir == 'L':
     left(grid)
 
 elif dir == 'R':
     right(grid)
     #down(grid)
-elif dir == 'D':
+elif dir == 'U':
     down(grid)
