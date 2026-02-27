@@ -70,26 +70,30 @@ def up(lst):
 def down(lst):
     newgrid = list([0]*4 for _ in range(4))
     for j in range(4):
-        i = 3
         temp = deque()
+
         
-        while i >= 0 :
-            if lst[i][j] == 0:
-                    i -= 1
-                    continue
-            if i == 0:
-                temp.appendleft(lst[i][j])
-                break
-            if lst[i][j]== lst[i-1][j]:
-                    temp.appendleft(2*lst[i][j])
-                    i -= 2
-            else:
-                    temp.appendleft(lst[i][j])
-                    i -= 1
-        while len(temp) < 4:
-                temp.appendleft(0)
         for i in range(4):
-            newgrid[i][j] = temp[i]
+            if lst[i][j] != 0:
+                temp.append(lst[i][j])
+
+        
+        merged = deque()
+        while temp:
+            if len(temp) >= 2 and temp[0] == temp[1]:
+                merged.append(temp.popleft() * 2)
+                temp.popleft()
+            else:
+                merged.append(temp.popleft())
+
+        
+        while len(merged) < 4:
+            merged.appendleft(0)
+
+        # 열에 채우기
+        for i in range(4):
+            newgrid[i][j] = merged[i]
+
     for r in newgrid:
         print(*r)
                 
