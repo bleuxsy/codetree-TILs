@@ -1,64 +1,47 @@
-def move(sx, sy, L, num):
-    global answer, best
+import sys
+input = sys.stdin.readline
 
-    if L >= answer:
-        return
+n = int(input().rstrip())
+grid = [list(input().rstrip()) for _ in range(n)]
 
-    last_num = -1 if not num else num[-1]
-    state = (sx, sy, last_num, len(num))
-    if state in best and best[state] <= L:
-        return
-    best[state] = L
-
-    if grid[sx][sy] == 'E':
-        if len(num) >= 3:
-            answer = min(answer, L)
-        return
-
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        nx = sx + dx
-        ny = sy + dy
-
-        if 0 <= nx < n and 0 <= ny < n:
-            cell = grid[nx][ny]
-
-            # 숫자 칸인 경우
-            if cell not in ['.', 'E', 'S']:
-                val = int(cell)
-
-                # 1) 안 먹고 그냥 지나가기
-                move(nx, ny, L + 1, num)
-
-                # 2) 먹고 지나가기
-                if not num:
-                    move(nx, ny, L + 1, [val])
-                elif val > num[-1]:
-                    move(nx, ny, L + 1, num + [val])
-
-            else:
-                move(nx, ny, L + 1, num)
-
- 
-
-
-INF = 10 ** 18
-n = int(input())
-grid = [list(input()) for _ in range(n)]
-answer = INF
-total = 0
-best = {}
+pos = {}   # 숫자 위치 저장
+nums = []  # 숫자 목록
+sx = sy = ex = ey = -1
 
 for i in range(n):
     for j in range(n):
-        if grid[i][j] == 'S':
+        if grid[i][j].isdigit():
+            num = int(grid[i][j])
+            nums.append(num)
+            pos[num] = (i, j)
+        elif grid[i][j] == 'S':
             sx, sy = i, j
-        elif grid[i][j] == '.' or grid[i][j] == 'E':
-            continue
-        else:
-            total += 1
+        elif grid[i][j] == 'E':
+            ex, ey = i, j
 
-if total < 3:
+def dist(a, b):
+    x1, y1 = a
+    x2, y2 = b
+    return abs(x1 - x2) + abs(y1 - y2)
+
+nums.sort()
+
+if len(nums) < 3:
     print(-1)
 else:
-    move(sx, sy, 0, [])
-    print(-1 if answer == INF else answer)
+    answer = sys.maxsize
+
+    for i in range(len(nums)):
+        for j in range(i + 1, len(nums)):
+            for k in range(j + 1, len(nums)):
+                a, b, c = nums[i], nums[j], nums[k]
+
+                total = 0
+                total += dist((sx, sy), pos[a])
+                total += dist(pos[a], pos[b])
+                total += dist(pos[b], pos[c])
+                total += dist(pos[c], (ex, ey))
+
+                answer = min(answer, total)
+
+    print(answer if answer != sys.maxsize else -1)
