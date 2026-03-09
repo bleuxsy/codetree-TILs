@@ -22,14 +22,14 @@ def move(sx, sy, L, num):
         if 0 <= nx < n and 0 <= ny < n:
             cell = grid[nx][ny]
 
-          
+            # 숫자 칸인 경우
             if cell not in ['.', 'E', 'S']:
                 val = int(cell)
 
-                
+                # 1) 안 먹고 그냥 지나가기
                 move(nx, ny, L + 1, num)
 
-               
+                # 2) 먹고 지나가기
                 if not num:
                     move(nx, ny, L + 1, [val])
                 elif val > num[-1]:
@@ -37,3 +37,28 @@ def move(sx, sy, L, num):
 
             else:
                 move(nx, ny, L + 1, num)
+
+ 
+
+
+INF = 10 ** 18
+n = int(input())
+grid = [list(input()) for _ in range(n)]
+answer = INF
+total = 0
+best = {}
+
+for i in range(n):
+    for j in range(n):
+        if grid[i][j] == 'S':
+            sx, sy = i, j
+        elif grid[i][j] == '.' or grid[i][j] == 'E':
+            continue
+        else:
+            total += 1
+
+if total < 3:
+    print(-1)
+else:
+    move(sx, sy, 0, [])
+    print(-1 if answer == INF else answer)
