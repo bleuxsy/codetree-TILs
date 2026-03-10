@@ -1,31 +1,22 @@
-def dfs(cur, total ):
-    best = total 
-    
-    for nxt in graph[cur]:
+def dfs(v):
+    for nxt in graph[v]:
         if not visited[nxt]:
             visited[nxt] = True
-            best = max(best , dfs(nxt, total+1))
-            visited[nxt] = False
-
-
-    return best
-
-            
-
-#### 1 ----> 2
+            dfs(nxt)
 
 
 n, m = map(int, input().split())
-graph = [[] for _ in range(n+1)]
+
+graph = [[] for _ in range(n + 1)]
 
 for _ in range(m):
     a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
 
-visited = [False] * ( n + 1)
-answer = 0
-# Please write your code here.
+visited = [False] * (n + 1)
+
 visited[1] = True
-answer = dfs(1, 0)
-print(answer)
+dfs(1)
+
+print(sum(visited) - 1)
