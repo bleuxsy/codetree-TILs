@@ -16,6 +16,5 @@ for i in range(1, n):
     for j in range(1, n):
         dp[i][j] = max(dp[i-1][j] + grid[i][j], dp[i][j-1] + grid[i][j])
 
-for g in dp:
-    print(*g)
+
 print(max(dp[n-1]))
