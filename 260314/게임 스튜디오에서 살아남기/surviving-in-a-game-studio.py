@@ -1,31 +1,35 @@
+
+# 필요한 상수를 정의합니다.
+MOD = 10**9 + 7
+MAXN = 1005
+
+# n 값을 입력받습니다.
 n = int(input())
-MAX = 10**9 + 7
 
-# Please write your code here.
-dp = [[0] *(n+1) for _ in range(3)]
+# 동적 프로그래밍 배열을 초기화합니다.
+dp = [[[0 for _ in range(5)] for _ in range(5)] for _ in range(MAXN)]
 
-dp[0][1] = 1
-dp[1][1] = 1
-dp[2][1] = 1
+# 초기 상태를 설정합니다.
+dp[1][1][0] = 1  # 첫 번째 날에 T를 받은 경우
+dp[1][0][1] = 1  # 첫 번째 날에 B를 받은 경우
+dp[1][0][0] = 1  # 첫 번째 날에 G를 받은 경우
 
-dp[0][2] = 3
-dp[1][2] = 3
-dp[2][2] = 3
+# 동적 프로그래밍을 사용해 문제를 해결합니다.
+# dp[i][j][k] :: i번째 날에, T를 총합 j회 받았고, B를 최근 k회 연속 받은 경우의 가짓수
+for i in range(1, n):
+    for j in range(3):
+        for k in range(3):
+            # 다음 날로 넘어가는 경우의 수를 갱신합니다.
+            dp[i + 1][j + 1][0] = (dp[i + 1][j + 1][0] + dp[i][j][k]) % MOD
+            dp[i + 1][j][0] = (dp[i + 1][j][0] + dp[i][j][k]) % MOD
+            if k < 2:
+                dp[i + 1][j][k + 1] = (dp[i + 1][j][k + 1] + dp[i][j][k]) % MOD
 
-if n >= 3:
-    dp[0][3] = 9
-    dp[1][3] = 8
-    dp[2][3] = 8
+# 최종 결과를 계산합니다.
+ans = 0
+for j in range(3):
+    for k in range(3):
+        ans = (ans + dp[n][j][k]) % MOD
 
-    for i in range(4,n+1):
-        
-        # Good
-        dp[0][i] = dp[0][i-1] + dp[1][i-1] + dp[2][i-1]
-        # Bad
-        dp[1][i] = dp[0][i] - 2 ** (i-3)
-        # Te
-        dp[2][i] = dp[0][i] - ((i-1)*(i-2)* 2**(i-4))
-
-
-answer = int(dp[0][n] + dp[1][n] + dp[2][n])
-print(answer%MAX)
+# 결과를 출력합니다.
+print(ans)
