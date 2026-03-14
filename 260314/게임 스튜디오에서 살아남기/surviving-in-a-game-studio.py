@@ -21,4 +21,4 @@ for i in range(3,n+1):
     dp[2][i] = dp[0][i] - ((i-1)*(i-2)* 2**(i-4))
 
    
-print(int((dp[0][n] + dp[1][n] + dp[2][n])%MAX))
+print(int(dp[0][n] + dp[1][n] + dp[2][n])%MAX)
