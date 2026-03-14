@@ -3,7 +3,7 @@ P = input()
 flag =  'false'
 # Please write your code here.
 for p in range(len(P)):
-    if p > len(S):
+    if p >= len(S):
         break
     else:
         if P[p] == '.':
