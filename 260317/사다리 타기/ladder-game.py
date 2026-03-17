@@ -1,6 +1,6 @@
 def move(ladder, start):
     col = start
-    for r in range(m):
+    for r in range(H):
         if col < n - 1 and ladder[r][col] == 1:
             col += 1
         elif col > 0 and ladder[r][col - 1] == 1:
@@ -19,21 +19,19 @@ def check(new_ladder):
 def make(idx, new_ladder, total):
     global answer
 
-    # 이미 최솟값보다 많이 썼으면 중단
     if total >= answer:
         return
 
-    # 모든 가로줄을 다 본 경우
     if idx == m:
         if check(new_ladder):
             answer = min(answer, total)
         return
 
-    # 1) 현재 가로줄을 선택하지 않는 경우
+    # 선택 안 함
     make(idx + 1, new_ladder, total)
 
-    # 2) 현재 가로줄을 선택하는 경우
-    i, j = edges[idx]          # i: 세로줄 번호, j: 행 번호
+    # 선택 함
+    i, j = edges[idx]
     row = j - 1
     col = i - 1
 
@@ -45,7 +43,9 @@ def make(idx, new_ladder, total):
 n, m = map(int, input().split())
 edges = [tuple(map(int, input().split())) for _ in range(m)]
 
-ladder = [[0] * (n - 1) for _ in range(m)]
+H = max(j for i, j in edges) if edges else 0
+
+ladder = [[0] * (n - 1) for _ in range(H)]
 gold = [0] * n
 
 for i, j in edges:
@@ -55,6 +55,6 @@ for num in range(n):
     gold[num] = move(ladder, num)
 
 answer = m
-make(0, [[0] * (n - 1) for _ in range(m)], 0)
+make(0, [[0] * (n - 1) for _ in range(H)], 0)
 
 print(answer)
