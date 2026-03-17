@@ -1,29 +1,32 @@
-from collections import deque
+def dfs(x, y, nmin, nmax):
+    global answer
 
-q = deque()
+    if x == n - 1 and y == n - 1:
+        answer = min(answer, nmax - nmin)
+        return
+
+    for dx, dy in [(1, 0), (0, 1)]:
+        nx, ny = x + dx, y + dy
+
+        if 0 <= nx < n and 0 <= ny < n:
+            if not visited[nx][ny]:
+                new_min = min(nmin, grid[nx][ny])
+                new_max = max(nmax, grid[nx][ny])
+
+                visited[nx][ny] = 1
+                dfs(nx, ny, new_min, new_max)
+                visited[nx][ny] = 0
+
+
 n = int(input())
 grid = [list(map(int, input().split())) for _ in range(n)]
 
-INF = 10**9
-dp = [[[INF, -INF] for _ in range(n)] for _ in range(n)]
+INF = 10 ** 9
+answer = INF
 
-dp[0][0] = [grid[0][0], grid[0][0]]
-q.append((0, 0))
+visited = [[0] * n for _ in range(n)]
+visited[0][0] = 1
 
-while q:
-    cx, cy = q.popleft()
+dfs(0, 0, grid[0][0], grid[0][0])
 
-    for dx, dy in [(1, 0), (1, 1)]:
-        nx, ny = cx + dx, cy + dy
-
-        if 0 <= nx < n and 0 <= ny < n:
-            new_min = min(dp[cx][cy][0], grid[nx][ny])
-            new_max = max(dp[cx][cy][1], grid[nx][ny])
-
-         
-            if new_min != dp[nx][ny][0] or new_max != dp[nx][ny][1]:
-                dp[nx][ny][0] = new_min
-                dp[nx][ny][1] = new_max
-                q.append((nx, ny))
-
-print(dp[n-1][n-1][1] - dp[n-1][n-1][0])
+print(answer)
