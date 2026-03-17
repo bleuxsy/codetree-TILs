@@ -1,40 +1,39 @@
-n = int(input())
-grid = [list(map(int, input().split())) for _ in range(n)]
-
-values = sorted(set(num for row in grid for num in row))
-
-def can(low, high):
-    if not (low <= grid[0][0] <= high):
-        return False
-    if not (low <= grid[n-1][n-1] <= high):
-        return False
-
-    dp = [[False] * n for _ in range(n)]
-    dp[0][0] = True
-
+def initialize():
     for i in range(n):
         for j in range(n):
-            if not (low <= grid[i][j] <= high):
-                continue
+            dp[i][j] = INF
 
-            if i == 0 and j == 0:
-                continue
+    #1열 막행 초기화
+    dp[0][0] = grid[0][0]
+    for i in range(1, n):
+        dp[i][0] = max(dp[i-1][0], grid[i][0])
+    
+    for j in range(1, n):
+        dp[0][j] = max(dp[0][j-1], grid[0][j])
 
-            if i > 0 and dp[i-1][j]:
-                dp[i][j] = True
-            if j > 0 and dp[i][j-1]:
-                dp[i][j] = True
+def solve(lower):
+    for i in range(n):
+        for j in range(n):
+            if grid[i][j] < lower :
+                grid[i][j] = INF
+    initialize()
 
+    for i in range(1, n):
+        for j in range(1, n):
+            dp[i][j] = max(min(dp[i-1][j], dp[i][j-1]), grid[i][j])
+    
     return dp[n-1][n-1]
 
-answer = 10**9
 
-for i in range(len(values)):
-    for j in range(i, len(values)):
-        low = values[i]
-        high = values[j]
+n = int(input())
+grid = [list(map(int, input().split())) for _ in range(n)]
+INF =10 *8
 
-        if can(low, high):
-            answer = min(answer, high - low)
+for lower in range(1, 101):
+    upper = solve(lower)
 
-print(answer)
+    if upper == INF:
+        continue
+    ans = min(ans, upper - lower)
+
+print(ans)
