@@ -20,7 +20,7 @@ pq = []
 for edge in edges:
     grid[edge[1]][edge[0]] = edge[2]
 
-grid[5][5] = 0
+grid[n][n] = 0
 visited = ([False] * (n+1))
 heapq.heappush(pq, (0, n))
 D[n] = 0
