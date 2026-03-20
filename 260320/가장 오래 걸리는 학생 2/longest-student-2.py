@@ -24,6 +24,7 @@ grid[5][5] = 0
 visited = ([False] * (n+1))
 heapq.heappush(pq, (0, n))
 D[n] = 0
+D[0] = 0
 while pq:
     sw, idx = heapq.heappop(pq)
     if visited[idx]:
@@ -37,9 +38,9 @@ while pq:
         if  sw + nw < D[ny]:
 
             D[ny] = sw +nw
-            
+
             heapq.heappush(pq, (D[ny], ny))
 
+
+
 print(max(D))
-
-
