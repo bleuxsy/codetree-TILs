@@ -37,7 +37,7 @@ while pq:
         if  sw + nw < D[ny]:
 
             D[ny] = sw +nw
-            print(ny, D[ny])
+            
             heapq.heappush(pq, (D[ny], ny))
 
 print(max(D))
