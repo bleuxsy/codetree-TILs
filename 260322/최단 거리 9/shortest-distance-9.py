@@ -21,9 +21,9 @@ visited = [False] * (n + 1)
 while pq:
     cw, cx = heapq.heappop(pq)
 
-    if visited[cx]:
+    
+    if cw > D[cx]:
         continue
-    visited[cx] = True
 
     for nx, nw in graph[cx]:
         if D[nx] > D[cx] + nw:
