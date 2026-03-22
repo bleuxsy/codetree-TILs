@@ -12,6 +12,7 @@ graph = [[] for _ in range(n + 1)]
 
 for x, y, w in edges:
     graph[x].append((y, w))
+    graph[y].append((x, w))
 
 D[a] = 0
 heapq.heappush(pq, (0, a))
