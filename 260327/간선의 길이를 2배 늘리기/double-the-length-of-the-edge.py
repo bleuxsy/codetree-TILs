@@ -2,9 +2,11 @@ import heapq
 
 INF = 10**18
 
-def dijkstra(graph):
+def dijkstra(double_u=-1, double_v=-1):
     dist = [INF] * (n + 1)
+    parent = [-1] * (n + 1)
     pq = []
+
     dist[1] = 0
     heapq.heappush(pq, (0, 1))
 
@@ -15,36 +17,46 @@ def dijkstra(graph):
             continue
 
         for nx, w in graph[x]:
-            nd = cur_dist + w
+            cost = w
+
+            # 이번에 2배로 늘릴 간선이면 비용 2배
+            if (x == double_u and nx == double_v) or (x == double_v and nx == double_u):
+                cost = w * 2
+
+            nd = cur_dist + cost
             if dist[nx] > nd:
                 dist[nx] = nd
+                parent[nx] = x
                 heapq.heappush(pq, (nd, nx))
 
-    return dist[n]
+    return dist, parent
+
 
 n, m = map(int, input().split())
-edges = [tuple(map(int, input().split())) for _ in range(m)]
+graph = [[] for _ in range(n + 1)]
 
-grid = [[] for _ in range(n + 1)]
-for a, b, w in edges:
-    grid[a].append((b, w))
-    grid[b].append((a, w))
+for _ in range(m):
+    a, b, w = map(int, input().split())
+    graph[a].append((b, w))
+    graph[b].append((a, w))
 
-org = dijkstra(grid)
+# 원래 최단거리 + parent 구하기
+dist, parent = dijkstra()
+original = dist[n]
 
-answer = org
+# path 배열에 원래 최단경로의 간선 저장
+path = []
+cur = n
+while cur != 1:
+    prev = parent[cur]
+    path.append((prev, cur))
+    cur = prev
 
-for i in range(m):   # 간선 전체를 다 봐야 함
-    new_grid = [[] for _ in range(n + 1)]
+answer = original
 
-    for j in range(m):
-        a, b, w = edges[j]
-        if j == i:
-            w *= 2
-        new_grid[a].append((b, w))
-        new_grid[b].append((a, w))
+# path 위의 간선만 하나씩 2배로 바꿔서 다시 다익스트라
+for u, v in path:
+    new_dist, _ = dijkstra(u, v)
+    answer = max(answer, new_dist[n])
 
-    new_dist = dijkstra(new_grid)
-    answer = max(answer, new_dist)
-
-print(answer - org)
+print(answer - original)
