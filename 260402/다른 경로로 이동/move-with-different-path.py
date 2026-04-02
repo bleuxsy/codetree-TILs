@@ -1,67 +1,106 @@
+import sys
 import heapq
 
-INF = 10**18
+INT_MAX = sys.maxsize
 
-n, m = map(int, input().split())
-graph = [[] for _ in range(n + 1)]
+# 변수 선언 및 입력:
+n, m = tuple(map(int, input().split()))
 
+graph = [
+    [0] * (n + 1)
+    for _ in range(n + 1)
+]
+visited = [False] * (n + 1)
+
+dist = [0] * (n + 1)
+
+# 그래프를 인접행렬로 표현
+# 양방향 그래프이므로 양쪽 다 표시해줍니다.
 for _ in range(m):
-    a, b, w = map(int, input().split())
-    graph[a].append((b, w))
-    graph[b].append((a, w))
+    x, y, z = tuple(map(int, input().split()))
+    graph[x][y] = z
+    graph[y][x] = z
 
 
-def dijkstra(start, blocked):
-    dist = [INF] * (n + 1)
-    dist[start] = 0
-    pq = [(0, start)]
+def dijkstra(k):
+    # 그래프에 있는 모든 노드들에 대해
+    # 초기값을 전부 아주 큰 값으로 설정
+    for i in range(1, n + 1):
+        dist[i] = INT_MAX
 
+    # 시작위치에는 dist값을 0으로 설정
+    dist[k] = 0
+
+    # visited 값을 초기화해줍니다.
+    for i in range(1, n + 1):
+        visited[i] = False
+
+    pq = []
+    heapq.heappush(pq, (0, k))
+
+    # heapq를 이용한 다익스트라
     while pq:
-        d, x = heapq.heappop(pq)
+        min_dist, min_index = heapq.heappop(pq)
 
-        if dist[x] < d:
+        if visited[min_index]:
             continue
 
-        for nx, w in graph[x]:
-            if (x, nx) in blocked:
+        visited[min_index] = True
+
+        # 최솟값에 해당하는 정점에 연결된 간선들을 보며
+        # 시작점으로부터의 최단거리 값을 갱신해줍니다.
+        for j in range(1, n + 1):
+            # 간선이 존재하지 않는 경우에는 넘어갑니다.
+            if graph[min_index][j] == 0:
                 continue
 
-            nd = d + w
-            if dist[nx] > nd:
-                dist[nx] = nd
-                heapq.heappush(pq, (nd, nx))
-
-    return dist
+            if dist[j] > dist[min_index] + graph[min_index][j]:
+                dist[j] = dist[min_index] + graph[min_index][j]
+                heapq.heappush(pq, (dist[j], j))
 
 
-# 1번에서의 최단거리
-blocked = set()
-dist1 = dijkstra(1, blocked)
+dijkstra(n)
 
-# N번에서의 최단거리
-distN = dijkstra(n, blocked)
+# 도착지에서 시작하여
+# 시작점이 나오기 전까지
+# 최단거리를 만족하는 경로 중
+# 가장 간선 번호가 작은 곳으로 이동합니다.
+x = 1
+vertices = []
+vertices.append(x)
+while x != n:
+    for i in range(1, n + 1):
+        # 간선이 존재하지 않는 경우에는 넘어갑니다.
+        if graph[i][x] == 0:
+            continue
 
-# A가 못 가면 끝
-if dist1[n] == INF:
-    print(-1)
-    exit()
+        # 만약 b -> ... -> i -> x ... -> a로
+        # 실제 최단거리가 나올 수 있는 상황이었다면
+        # i를 작은 번호부터 보고 있으므로
+        # 바로 선택해줍니다.
+        if dist[i] + graph[i][x] == dist[x]:
+            x = i
+            break
 
-# A의 사전순 최단경로 복원
-cur = 1
-while cur != n:
-    candidates = []
+    vertices.append(x)
 
-    for nx, w in graph[cur]:
-        # cur -> nx가 최단경로 위에 있는지 확인
-        if dist1[cur] + w + distN[nx] == dist1[n]:
-            candidates.append(nx)
+# A가 이동한 최단거리에서
+# 사전순으로 가장 앞선 경로상에 있는
+# 간선을 제거합니다.
+length = len(vertices)
+for i in range(length - 1):
+    x = vertices[i]
+    y = vertices[i + 1]
+    graph[x][y] = 0
+    graph[y][x] = 0
 
-    nxt = min(candidates)   # 사전순으로 가장 앞선 정점 선택
-    blocked.add((cur, nxt))
-    blocked.add((nxt, cur))
-    cur = nxt
+# B가 이동했을 때의
+# 최단거리를 구합니다.
+dijkstra(1)
 
-# B의 최단거리
-distB = dijkstra(1, blocked)
+ans = dist[n]
+# 불가능하다면 -1을 출력합니다.
+if ans == INT_MAX:
+    ans = -1
 
-print(-1 if distB[n] == INF else distB[n])
+print(ans)
